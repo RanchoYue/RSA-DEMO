@@ -146,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 getContent();
                 Toast.makeText(MainActivity.this, "RSA解密", Toast.LENGTH_SHORT).show();
-                String jiami = tvTextRasJiami.getText().toString().trim();
-                Log.d("TAG", "jiami=" + jiami);
+                String decrypt = tvTextRasJiami.getText().toString().trim();
+                Log.d("TAG", "decrypt=" + decrypt);
                 /**服务端使用私钥解密*/
                 try {
-                    String decryptStr = RSAUtils.decrypt(PRIVATE_KEY, jiami);
+                    String decryptStr = RSAUtils.decrypt(PRIVATE_KEY, decrypt);
                     Log.d("TAG", "decryptStr=" + decryptStr);
                     tvTextRasJiemi.setText(decryptStr);
                 } catch (Exception e) {
