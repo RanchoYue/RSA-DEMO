@@ -226,8 +226,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void aesDecrypt() {
         try {
-            String encrypt = AESUtils.decrypt(body, KeyUtils.getPrivateKey16());
-            tvAesDe.setText(encrypt);
+            String decrypt = AESUtils.decrypt(body, KeyUtils.getPrivateKey16());
+            tvAesDe.setText(decrypt);
         } catch (Exception e) {
             e.printStackTrace();
         }
