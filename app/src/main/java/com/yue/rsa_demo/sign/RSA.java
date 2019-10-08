@@ -1,6 +1,8 @@
 
 package com.yue.rsa_demo.sign;
 
+import android.util.Base64;
+
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -21,7 +23,7 @@ public class RSA {
      */
     public static String sign(String content, String privateKey, String input_charset) {
         try {
-            PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.decode(privateKey));
+            PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.decode(privateKey, Base64.DEFAULT));
             KeyFactory keyf = KeyFactory.getInstance("RSA");
             PrivateKey priKey = keyf.generatePrivate(priPKCS8);
 
@@ -33,7 +35,7 @@ public class RSA {
 
             byte[] signed = signature.sign();
 
-            return Base64.encode(signed);
+            return Base64.encodeToString(signed, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +55,7 @@ public class RSA {
     public static boolean verify(String content, String sign, String alipay_public_key, String input_charset) {
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            byte[] encodedKey = Base64.decode(alipay_public_key);
+            byte[] encodedKey = Base64.decode(alipay_public_key, Base64.DEFAULT);
             PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 
 
@@ -63,7 +65,7 @@ public class RSA {
             signature.initVerify(pubKey);
             signature.update(content.getBytes(input_charset));
 
-            boolean bverify = signature.verify(Base64.decode(sign));
+            boolean bverify = signature.verify(Base64.decode(sign, Base64.DEFAULT));
             return bverify;
 
         } catch (Exception e) {

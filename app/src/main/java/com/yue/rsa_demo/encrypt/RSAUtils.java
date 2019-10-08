@@ -1,6 +1,6 @@
 package com.yue.rsa_demo.encrypt;
 
-import com.yue.rsa_demo.sign.Base64;
+import android.util.Base64;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -28,8 +28,12 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
 public final class RSAUtils {
-    /*android客户端用这个*/
+
+    /**
+     * android客户端用这个
+     */
     private static String RSA = "RSA/ECB/PKCS1Padding";
+
     /*java 服务器端用这个*/
 //    private static String RSA = "RSA";
 
@@ -90,7 +94,7 @@ public final class RSAUtils {
                 byte[] bytes1 = cipher.doFinal(buf1);
                 write.write(bytes1);
             }
-            return Base64.encode(write.toByteArray());
+            return Base64.encodeToString(write.toByteArray(), Base64.DEFAULT);
         } catch (InvalidKeyException e) {
             e.printStackTrace();
         } catch (IllegalBlockSizeException e) {
@@ -114,8 +118,7 @@ public final class RSAUtils {
         try {
             Cipher cipher = Cipher.getInstance(RSA);
             cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey));
-
-            byte[] bytes = Base64.decode(enStr);
+            byte[] bytes = Base64.decode(enStr, Base64.DEFAULT);
             ByteArrayInputStream read = new ByteArrayInputStream(bytes);
             ByteArrayOutputStream write = new ByteArrayOutputStream();
             byte[] buf = new byte[128];
@@ -156,13 +159,10 @@ public final class RSAUtils {
      * @throws Exception
      */
     public static PublicKey getPublicKey(String key) throws Exception {
-        byte[] keyBytes;
-//        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
-        keyBytes = Base64.decode(key);
+        byte[] keyBytes = Base64.decode(key, Base64.DEFAULT);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PublicKey publicKey = keyFactory.generatePublic(keySpec);
-        return publicKey;
+        return keyFactory.generatePublic(keySpec);
     }
 
     /**
@@ -172,13 +172,10 @@ public final class RSAUtils {
      * @throws Exception
      */
     public static PrivateKey getPrivateKey(String key) throws Exception {
-        byte[] keyBytes;
-//        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
-        keyBytes = Base64.decode(key);
+        byte[] keyBytes = Base64.decode(key, Base64.DEFAULT);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-        return privateKey;
+        return keyFactory.generatePrivate(keySpec);
     }
 
 
@@ -303,7 +300,7 @@ public final class RSAUtils {
             byte[] buffer = Base64Utils.decode(publicKeyStr);
             KeyFactory keyFactory = KeyFactory.getInstance(RSA);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
-            return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+            return keyFactory.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException e) {
             throw new Exception("无此算法");
         } catch (InvalidKeySpecException e) {
@@ -324,10 +321,9 @@ public final class RSAUtils {
     public static PrivateKey loadPrivateKey(String privateKeyStr) throws Exception {
         try {
             byte[] buffer = Base64Utils.decode(privateKeyStr);
-            // X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(buffer);
             KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-            return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+            return keyFactory.generatePrivate(keySpec);
         } catch (NoSuchAlgorithmException e) {
             throw new Exception("无此算法");
         } catch (InvalidKeySpecException e) {
