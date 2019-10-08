@@ -10,11 +10,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.yue.rsa_demo.encrypt.AESUtils;
 import com.yue.rsa_demo.encrypt.Base64Utils;
 import com.yue.rsa_demo.encrypt.RSAUtils;
 import com.yue.rsa_demo.sign.RSA;
+import com.yue.rsa_demo.utils.KeyUtils;
 
-public class MainActivity extends AppCompatActivity {
+import java.nio.charset.StandardCharsets;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText edText;
     /**
@@ -40,7 +44,13 @@ public class MainActivity extends AppCompatActivity {
     Button rsaSignBtnJiemi;
     TextView tvTextRasSignJiemi;
 
+    Button btnAes;
+    TextView tvAes;
+    Button btnAesDe;
+    TextView tvAesDe;
+
     private static String content = null;
+    private String body = "";
 
     /**
      * 密钥内容 base64 code
@@ -87,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
         tvTextRasSignJiami = findViewById(R.id.tv_text_ras_sign_jiami);
         rsaSignBtnJiemi = findViewById(R.id.rsa_sign_btn_jiemi);
         tvTextRasSignJiemi = findViewById(R.id.tv_text_ras_sign_jiemi);
+
+        btnAes = findViewById(R.id.aes_btn);
+        btnAes.setOnClickListener(this);
+        tvAes = findViewById(R.id.tv_text_aes);
+        btnAesDe = findViewById(R.id.aes_btn_de);
+        btnAesDe.setOnClickListener(this);
+        tvAesDe = findViewById(R.id.tv_text_aes_de);
     }
 
 
@@ -194,5 +211,39 @@ public class MainActivity extends AppCompatActivity {
 
     private void getContent() {
         content = edText.getText().toString().trim();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.aes_btn:
+                aesEncrypt();
+                break;
+            case R.id.aes_btn_de:
+                aesDecrypt();
+                break;
+            default:
+        }
+    }
+
+    private void aesDecrypt() {
+        try {
+            String encrypt = AESUtils.decrypt(body, KeyUtils.getPrivateKey16());
+            tvAesDe.setText(encrypt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void aesEncrypt() {
+        getContent();
+        KeyUtils.generatePrivateKey16();
+        try {
+            String encrypt = AESUtils.encrypt(content, KeyUtils.getPrivateKey16());
+            tvAes.setText(encrypt);
+            body = encrypt;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -93,5 +93,32 @@
             android:layout_height="wrap_content"
             android:text="RSA验证后：" />
 
+        <!--yue-->
+
+        <Button
+            android:id="@+id/aes_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="7.AES加密" />
+
+        <TextView
+            android:id="@+id/tv_text_aes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AES加密后：" />
+
+        <Button
+            android:id="@+id/aes_btn_de"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="8.AES解密" />
+
+        <TextView
+            android:id="@+id/tv_text_aes_de"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AES解密后：" />
+
     </LinearLayout>
 </ScrollView>
