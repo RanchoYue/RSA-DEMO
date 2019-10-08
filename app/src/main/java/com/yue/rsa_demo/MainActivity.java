@@ -16,8 +16,6 @@ import com.yue.rsa_demo.encrypt.RSAUtils;
 import com.yue.rsa_demo.sign.RSA;
 import com.yue.rsa_demo.utils.KeyUtils;
 
-import java.nio.charset.StandardCharsets;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText edText;
